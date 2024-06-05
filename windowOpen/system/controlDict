@@ -1,0 +1,74 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2206                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     simpleFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         40000;	//3000
+
+deltaT          1;
+
+writeControl    timeStep;
+
+writeInterval   1000;	//50-100
+
+purgeWrite      10;
+
+writeFormat     binary;	//ascii-binary
+
+writePrecision  8;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+functions
+{
+forceCoeffs
+    {
+        type                forceCoeffs;
+        libs                ( "libforces.so" );
+        patches ( car);
+        rho rhoInf;
+        rhoInf 1.205;
+        CofR ( 0 0 0);
+        liftDir ( 0 0 1);
+        dragDir ( 1 0 0);
+        pitchAxis ( 0 1 0);
+        magUInf 30;
+        lRef 1;
+        Aref 1;
+        writeControl timeStep;
+        writeInterval 1;
+    }
+
+yPlus
+    {
+        type yPlus;
+        libs (fieldFunctionObjects);
+        patches (car);
+        writeControl outputTime;
+    }
+}
